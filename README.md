@@ -18,7 +18,7 @@ This guide will walk you through the steps to open the Blood Bridge website on y
 
 Before you begin, ensure you have the following prerequisites installed:
 
-1. Visit the Blood Bridge GitHub repository: [Blood Bridge GitHub Repo](https://github.com/yourusername/your-repo).
+1. Visit the Blood Bridge GitHub repository: [Blood Bridge GitHub Repo](https://github.com/qaidjoharj53/Blood-Bridge).
 
 2. Click on the "Code" button and select "Download ZIP" to download the source code as a ZIP archive.
 
