@@ -44,7 +44,7 @@ Before you begin, ensure you have the following prerequisites installed:
 
 2. Ensure that your main webpage is named `index.php` or `index.html`. This is the page that will be displayed when you access `http://localhost` in your web browser.
 
-## Step 4: Access Your Website
+### Step 4: Access Your Website
 
 1. Open your web browser (e.g., Chrome, Firefox, or Edge).
 
@@ -52,7 +52,7 @@ Before you begin, ensure you have the following prerequisites installed:
 
 Congratulations! You've successfully set up and opened your Blood Bridge website on your computer or PC using XAMPP.
 
-### Additional Notes
+## Additional Notes
 
 -   To stop the Apache and MySQL services, go back to the XAMPP Control Panel and click the "Stop" button next to each service.
 
