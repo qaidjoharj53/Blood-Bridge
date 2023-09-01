@@ -1,6 +1,6 @@
 # Blood Bridge
 
-### Video Demo:
+### Video Demo:  [Blood Bridge | CS50x Final Project](https://www.youtube.com/watch?v=3VZnSMy5QFg)
 
 ### Description:
 
@@ -9,6 +9,7 @@ Blood Bridge is a full stack website project based on online blood donation. Thi
 ![Login Page](./assets/images/sc1.png)
 
 ![Home Page](./assets/images/sc2.png)
+
 
 ## Blood Bridge Website Setup Guide
 
