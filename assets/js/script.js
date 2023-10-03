@@ -32,6 +32,25 @@ const closeNav = function () {
 
 addEventOnElem(navbarLinks, "click", closeNav);
 
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+    if (body.getAttribute('data-theme') === 'light') {
+        // Switch to dark mode
+        body.setAttribute('data-theme', 'dark');
+    } else {
+        // Switch to light mode
+        body.setAttribute('data-theme', 'light');
+    }
+    if(body.getAttribute('data-theme')==='dark'){
+      document.getElementById("home").style="background-color:5c5b5b";
+      themeToggle.style.color="white";
+    }
+    if(body.getAttribute('data-theme')==='light'){
+      themeToggle.style.color="black";
+    }
+});
 
 
 /*header active*/

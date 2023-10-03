@@ -4,11 +4,11 @@
 
   --light-steel-blue: hsl(218, 33%, 77%);
   --royal-blue-light: hsl(225, 68%, 53%);
-  --flickr-blue_30: hsla(225, 68%, 53%, 0.3);
+  --flickr-blue_30: hsla(225, 86%, 60%, 0.637);
   --carolina-blue: hsl(201, 92%, 47%);
-  --oxford-blue-1: hsl(218, 70%, 18%);
-  --oxford-blue-2: hsl(217, 100%, 12%);
-  --oxford-blue-3: hsl(218, 71%, 11%);
+  --oxford-blue-1: hsl(218, 73%, 51%);
+  --oxford-blue-2: hsl(218, 70%, 52%);
+  --oxford-blue-3: hsl(218, 69%, 44%);
   --gainsboro_50: hsla(0, 0%, 85%, 0.5);
   --lavender-web: hsl(225, 67%, 91%);
   --sonic-silver: hsl(0, 0%, 47%);
@@ -115,11 +115,34 @@ html {
   font-size: 10px;
   scroll-behavior: smooth;
 }
-
+#theme-toggle{
+  font-weight: bold;
+}
+#theme-toggle:hover{
+    color:#0056b3;
+    font-weight: bolder;
+}
 body {
   background-color: var(--white);
   color: var(--sonic-silver);
   font-size: 1.5rem;
+}
+
+/* Shared styles */
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light mode styles */
+body[data-theme="light"] {
+  background-color: #ffffff;
+  color: #1d1c1c;
+}
+
+/* Dark mode styles */
+body[data-theme="dark"] {
+  background-color: #494242; /* Dark gray background */
+  color: #e6dfdf; /* White text color */
 }
 
 
