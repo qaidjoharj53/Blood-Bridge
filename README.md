@@ -53,6 +53,26 @@ Before you begin, ensure you have the following prerequisites installed:
 
 Congratulations! You've successfully set up and opened your Blood Bridge website on your computer or PC using XAMPP.
 
+### Badges
+![License](https://img.shields.io/github/license/qaidjoharj53/Blood-Bridge)
+
+![GitHub stars](https://img.shields.io/github/stars/qaidjoharj53/Blood-Bridge)
+
+![Project Status](https://img.shields.io/badge/status-active-brightgreen)
+
+![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
+
+![Build Status](https://img.shields.io/travis/qaidjoharj53/Blood-Bridge)
+
+[![Code Quality](https://img.shields.io/codeclimate/maintainability/qaidjoharj53/Blood-Bridge)](https://codeclimate.com/github/qaidjoharj53/Blood-Bridge)
+
+![Code Coverage](https://img.shields.io/codecov/c/github/qaidjoharj53/Blood-Bridge)
+
+![GitHub issues](https://img.shields.io/github/issues-raw/qaidjoharj53/Blood-Bridge)
+
+![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/qaidjoharj53/Blood-Bridge)
+
+
 ## Additional Notes
 
 -   To stop the Apache and MySQL services, go back to the XAMPP Control Panel and click the "Stop" button next to each service.
