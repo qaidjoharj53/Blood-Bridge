@@ -60,6 +60,7 @@ The modern alternative is using Docker. You'll only need [docker](https://docs.d
 
 You'll only need to run the `docker compose up -d` command from your terminal to run the website.
 It will be accessible under http://localhost afterwards.
+You can stop the containers again using `docker compose down --remove-orphans`
 
 ## Badges of Honor
 
