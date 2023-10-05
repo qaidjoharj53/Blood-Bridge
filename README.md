@@ -6,13 +6,16 @@
 
 Blood Bridge is not just a website; it's a lifeline for those in need. Our full-stack website project simplifies the process of blood donation, making it accessible to everyone. With its responsive design and user-friendly interface, Blood Bridge empowers donors and recipients alike.
 
-![Login Page](./assets/images/sc1.png)
+![Login Page](./code/assets/images/sc1.png)
 
-![Home Page](./assets/images/sc2.png)
+![Home Page](./code/assets/images/sc2.png)
 
-## Blood Bridge Setup Guide
+# Blood Bridge Setup Guide
 
 Ready to set up Blood Bridge on your computer? Follow these steps to get it up and running smoothly.
+You can set it up using locally, or using Docker.
+
+## XAMPP
 
 ### Prerequisites
 
@@ -40,9 +43,9 @@ Before you begin, make sure you have the following prerequisites:
 
 ### Step 3: Configure Your Website
 
-1. Place your Blood Bridge website files in the appropriate directory. On Windows, it's `C:\xampp\htdocs` by default. On macOS and Linux, you'll find it at `/opt/lampp/htdocs`.
+1. Place your files from the `code`-folder in the appropriate directory. On Windows, it's `C:\xampp\htdocs` by default. On macOS and Linux, you'll find it at `/opt/lampp/htdocs`.
 
-2. Ensure that your main webpage is named either `index.php` or `index.html`. This will be the page displayed when you visit `http://localhost` in your web browser.
+2. Ensure that your main webpage is named either `index.php` or `index.html` and is inside the `htdocs` folder. This will be the page displayed when you visit `http://localhost` in your web browser.
 
 ### Step 4: Access Your Website
 
@@ -52,7 +55,14 @@ Before you begin, make sure you have the following prerequisites:
 
 Congratulations! You've successfully set up and opened Blood Bridge on your computer or PC using XAMPP.
 
-### Badges of Honor
+## Docker
+The modern alternative is using Docker. You'll only need [docker](https://docs.docker.com/engine/install/) and docker-compose. 
+
+You'll only need to run the `docker compose up -d` command from your terminal to run the website.
+It will be accessible under http://localhost afterwards.
+You can stop the containers again using `docker compose down --remove-orphans`
+
+## Badges of Honor
 
 ![License](https://img.shields.io/github/license/qaidjoharj53/Blood-Bridge)
 ![GitHub stars](https://img.shields.io/github/stars/qaidjoharj53/Blood-Bridge)
