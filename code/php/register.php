@@ -1,10 +1,19 @@
 <?php
-session_start();
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize form inputs
+    $name = isset($_POST["full_name"]) ? htmlspecialchars($_POST["full_name"]) : "";
     $email = isset($_POST["email"]) ? htmlspecialchars($_POST["email"]) : "";
-    $password = isset($_POST["password"]) ? $_POST["password"] : "";
+    $phone = isset($_POST["mobile_number"]) ? htmlspecialchars($_POST["mobile_number"]) : "";
+    $password = isset($_POST["password"]) ? $_POST["password"] : ""; // No need to htmlspecialchars for the password
+    $bloodgroup = isset($_POST["blood_group"]) ? htmlspecialchars($_POST["blood_group"]) : "";
+    $gender = isset($_POST["gender"]) ? htmlspecialchars($_POST["gender"]) : "";
+    $birthdate = isset($_POST["birth_date"]) ? htmlspecialchars($_POST["birth_date"]) : "";
+    $weight = isset($_POST["weight"]) ? htmlspecialchars($_POST["weight"]) : "";
+    $state = isset($_POST["state"]) ? htmlspecialchars($_POST["state"]) : "";
+    $zipcode = isset($_POST["zip_code"]) ? htmlspecialchars($_POST["zip_code"]) : "";
+    $district = isset($_POST["district"]) ? htmlspecialchars($_POST["district"]) : "";
+    $area = isset($_POST["area"]) ? htmlspecialchars($_POST["area"]) : "";
+    $landmarks = isset($_POST["landmarks"]) ? htmlspecialchars($_POST["landmarks"]) : "";
 
     $servername = "localhost";
     $username = "root";
@@ -14,40 +23,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-
-    // Check if the email exists in the database
-    $stmt = $conn->prepare("SELECT password FROM registered_users WHERE email = ?");
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT); // Hash the password
+    $stmt = $conn->prepare("INSERT INTO registered_users (name, email, phone, password, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if (!$stmt) {
         die("Error: " . $conn->error);
     }
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($hashedPassword);
-        $stmt->fetch();
-
-        // Verify the password
-        if (password_verify($password, $hashedPassword)) {
-            // Password is correct, set session or do any other action
-            $_SESSION["loggedin"] = true;
-            $_SESSION["email"] = $email;
-            // Check if "Remember Me" is checked
-            if (isset($_POST["remember_me"]) && $_POST["remember_me"] === "1") {
-                $cookie_name = "remember_me_cookie";
-                $cookie_value = $email;
-                $cookie_expiry = time() + (86400 * 30); // 30 days (86400 seconds per day)
-                setcookie($cookie_name, $cookie_value, $cookie_expiry, "/");
-            }
-            // Redirect the user to the dashboard or any other page
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            echo '<script>alert("Incorrect email or password. Please try again.");</script>';
-        }
+    $stmt->bind_param("sssssssssssss", $name, $email, $phone, $hashedPassword, $bloodgroup, $gender, $birthdate, $weight, $state, $zipcode, $district, $area, $landmarks);
+    if ($stmt->execute()) {
+        echo '<script>alert("Registration successful!");</script>';
     } else {
-        echo '<script>alert("Incorrect email or password. Please try again.");</script>';
+        echo '<script>alert("Error: Unable to register. Please try again later.");</script>';
     }
     $stmt->close();
     $conn->close();
@@ -61,13 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blood Bridge - Connect the Donors</title>
+  <title>Blood Bridge - connect the donors</title>
 
   <!-- favicon-->
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!--css-->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
   
   <!-- google font link-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,30 +60,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    hr {
-      border: none;
-      height: 1px;
-      background-color: #c5c7c9;
-      margin: 20px 0;
-    }
-
     /* Form Styles */
-    .form-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
     .form-title {
-      color: var(--oxford-blue-1);
-      font-family: var(--ff-poppins);
-      font-size: 3.4rem;
-      font-weight: var(--fw-800);
-      text-align: center;
-      margin-bottom: 20px;
+        color: var(--oxford-blue-1);
+        font-family: var(--ff-poppins);
+        font-size: 3.4rem;
+        font-weight: var(--fw-800);
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     .form-section {
@@ -136,29 +105,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .form-field input[type="submit"]:hover {
       background-color: #060952;
     }
-
-    .form-title-login {
-      text-align: center;
-      margin-top: 30px;
-      font-family: var(--ff-poppins);
-      font-size: 1.8rem;
-      color: #216aca;
-    }
-
-    .form-title-login a {
-      color: #216aca;
-      text-decoration: underline;
-    }
-
-    .form-title-login a:hover {
-      color: #03d9ff;
-    }
   </style>
 
 </head>
 
-<body>
-<header class="header">
+<body id="top">
+  <!-- HEADER-->
+  <header class="header">
     <div class="header-top">
       <div class="container">
         <ul class="contact-list">
@@ -201,16 +154,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav class="navbar container" data-navbar>
           <ul class="navbar-list">
             <li>
-              <a href="index.html" class="navbar-link" data-nav-link>Home</a>
+              <a href="../index.html" class="navbar-link" data-nav-link>Home</a>
             </li>
             <li>
-              <a href="#service" class="navbar-link" data-nav-link>Find donor</a>
+              <a href="../index.html#service" class="navbar-link" data-nav-link>Find donor</a>
             </li>
             <li>
-              <a href="about.html" class="navbar-link" data-nav-link>About Us</a>
+              <a href="../about.html" class="navbar-link" data-nav-link>About Us</a>
             </li>
             <li>
-              <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
+              <a href="../index.html#blog" class="navbar-link" data-nav-link>Blog</a>
             </li>
             <li>
               <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
@@ -228,42 +181,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <main>
     <article>
-      <section class="section hero" id="home" style="background-image: url('./assets/images/hero-bg.png'); margin: 0%;"
-        aria-label="hero">
-        <!-- Login and Registration Form -->
-        <div class="container">
-          <div class="form-container">
-            <div class="form-title">Login</div>
-            <hr><br><br>
-            <form action="" method="POST">
-              <div class="form-section">
-                <div class="form-field">
-                  <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-field">
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-field">
-                <label for="remember_me">Remember Me:</label>
-                <input type="checkbox" id="remember_me" name="remember_me" value="1">
-                </div>
-              </div><br>
-              <button type="submit" class="btn">Login</button>
-            </form><br><br>
-            <div class="form-title">Not Registered? <u><a href="register.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Register Here</a></u></div>
-          </div>
-          <figure class="hero-banner">
-            <img src="./assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
-            <center><h1>Welcome back</h1><center>
-          </figure>
-        </div>
-      </section>
-    </article>
-  </main>
-
-  <!--Footer-->
+        <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png'); margin: 0%;" aria-label="hero">
+            <!-- Login and Registration Form -->
+            <div class="container">
+              <div class="form-container">
+                <div class="form-title">Register</div>
+                <form action="#" method="POST">
+                  <!-- Login Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="full-name">FULL NAME</label>
+                      <input type="text" id="full-name" name="full_name" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="mobile">MOBILE NUMBER</label>
+                      <input type="text" id="mobile" name="mobile_number" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="email">EMAIL</label>
+                      <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="password">PASSWORD</label>
+                      <input type="password" id="password" name="password" required>
+                    </div>
+                  </div>
+                  <!-- Donor Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="blood-group">BLOOD GROUP</label>
+                      <select id="blood-group" name="blood_group" required>
+                        <option value="" disabled selected>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                      </select>
+                    </div>
+                    <div class="form-field">
+                      <label for="birth-date">BIRTH DATE</label>
+                      <input type="date" id="birth-date" name="birth_date" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="gender">GENDER</label>
+                      <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="form-field">
+                      <label for="weight">WEIGHT</label>
+                      <input type="text" id="weight" name="weight" required>
+                    </div>
+                  </div>
+                  <!-- Contact Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="state">STATE</label>
+                      <input type="text" id="state" name="state" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="district">DISTRICT</label>
+                      <input type="text" id="district" name="district" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="zip-code">ZIP CODE</label>
+                      <input type="text" id="zip-code" name="zip_code" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="area">AREA</label>
+                      <input type="text" id="area" name="area" required>
+                    </div>
+                  </div>
+                  <div class="form-field">
+                      <label for="area">Landmarks</label>
+                      <input type="text" id="landmarks" name="landmarks" required>
+                    </div>
+                  <button type="submit" class="btn">Register</button>
+                </form>
+                <div class="form-title">Already Registered? <u><a href="login.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Login Here</a></u></div>
+              </div>
+              <figure class="hero-banner">
+                <img src="../assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
+                <center><h2>New Here ?</h2></center>
+              </figure>
+            </div>
+          </section>
+  
+  <!--FOOTER-->
   <footer class="footer">
     <div class="footer-top section">
       <div class="container">
@@ -288,7 +299,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="footer-list-title">Other Links</p>
           </li>
           <li>
-            <a href="index.html" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Home</span>
             </a>
@@ -300,7 +311,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </a>
           </li>
           <li>
-            <a href="about.html" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">About us</span>
             </a>
@@ -312,13 +323,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </a>
           </li>
           <li>
-            <a href="contact.php" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Contact</span>
             </a>
           </li>
           <li>
-            <a href="login.php" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Login / Register</span>
             </a>
@@ -369,7 +380,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li>
             <p class="footer-list-title">Contact Us</p>
           </li>
-          </li>
+
           <li class="footer-item">
             <div class="item-icon">
               <ion-icon name="call-outline"></ion-icon>
@@ -392,17 +403,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </p>
         <ul class="social-list">
           <li>
-            <a href="https://www.facebook.com/andro.pool.54?mibextid=ZbWKwL" class="social-link">
+            <a href="https://www.facebook.com/" class="social-link">
               <ion-icon name="logo-facebook"></ion-icon>
             </a>
           </li>
           <li>
-            <a href="https://www.instagram.com/_vladimir_putin.___/" class="social-link">
+            <a href="https://www.instagram.com/" class="social-link">
               <ion-icon name="logo-instagram"></ion-icon>
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/Annabel07785340" class="social-link">
+            <a href="https://twitter.com/" class="social-link">
               <ion-icon name="logo-twitter"></ion-icon>
             </a>
           </li>
@@ -417,7 +428,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </a>
 
   <!--custom js link-->
-  <script src="./assets/js/script.js" defer></script>
+  <script src="../assets/js/script.js" defer></script>
   <!--ionicon link-->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

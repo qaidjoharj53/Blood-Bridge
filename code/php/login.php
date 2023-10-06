@@ -1,3 +1,59 @@
+<?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate and sanitize form inputs
+    $email = isset($_POST["email"]) ? htmlspecialchars($_POST["email"]) : "";
+    $password = isset($_POST["password"]) ? $_POST["password"] : "";
+
+    $servername = "localhost";
+    $username = "root";
+    $dbpassword = "";
+    $dbname = "bloodbridge_db";
+    $conn = new mysqli($servername, $username, $dbpassword, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Check if the email exists in the database
+    $stmt = $conn->prepare("SELECT password FROM registered_users WHERE email = ?");
+    if (!$stmt) {
+        die("Error: " . $conn->error);
+    }
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($hashedPassword);
+        $stmt->fetch();
+
+        // Verify the password
+        if (password_verify($password, $hashedPassword)) {
+            // Password is correct, set session or do any other action
+            $_SESSION["loggedin"] = true;
+            $_SESSION["email"] = $email;
+            // Check if "Remember Me" is checked
+            if (isset($_POST["remember_me"]) && $_POST["remember_me"] === "1") {
+                $cookie_name = "remember_me_cookie";
+                $cookie_value = $email;
+                $cookie_expiry = time() + (86400 * 30); // 30 days (86400 seconds per day)
+                setcookie($cookie_name, $cookie_value, $cookie_expiry, "/");
+            }
+            // Redirect the user to the dashboard or any other page
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            echo '<script>alert("Incorrect email or password. Please try again.");</script>';
+        }
+    } else {
+        echo '<script>alert("Incorrect email or password. Please try again.");</script>';
+    }
+    $stmt->close();
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,13 +61,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blood Bridge - connect the donors</title>
+  <title>Blood Bridge - Connect the Donors</title>
 
   <!-- favicon-->
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!--css-->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
   
   <!-- google font link-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,85 +75,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Popup styles */
-    .popup {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #c5c7c9;
+      margin: 20px 0;
+    }
+
+    /* Form Styles */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
       padding: 20px;
-      background: linear-gradient(135deg, #ffffff, #a3d2ee);
-      color: #0e254e;
-      font-size: 16px;
-      z-index: 9999;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+      color: var(--oxford-blue-1);
+      font-family: var(--ff-poppins);
+      font-size: 3.4rem;
+      font-weight: var(--fw-800);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .form-field {
+      flex: 0 0 48%;
+      margin-bottom: 20px;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
-    @media screen and (max-width: 768px) {
-    .hero-form {
-        display: flex;
-        flex-direction: column;
-      }
-      .email-field {
-        margin-bottom: 10px;
-      }
-      .hero-banner iframe {
-        width: 100%;
-        height: 200px;
-      }
-    }
-    @media screen and (max-width: 900px) {
-      .hero-form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .email-field {
-        margin-bottom: 10px;
-      }
-
-      .hero-banner iframe {
-        width: 100%;
-        height: 250px;
-      }
-    }
-    /* Media query for screen sizes between 905x800 and 1197x800 */
-    @media screen and (min-width: 905px) and (max-width: 1197px) {
-      .hero-form {
-        max-width: 70%;
-        margin: 0 auto;
-      }
-      .hero-banner iframe {
-        width: 100%;
-        height: 300px;
-      }
+    .form-field input[type="submit"] {
+      background-color: #216aca;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
     }
 
+    .form-field input[type="submit"]:hover {
+      background-color: #060952;
+    }
+
+    .form-title-login {
+      text-align: center;
+      margin-top: 30px;
+      font-family: var(--ff-poppins);
+      font-size: 1.8rem;
+      color: #216aca;
+    }
+
+    .form-title-login a {
+      color: #216aca;
+      text-decoration: underline;
+    }
+
+    .form-title-login a:hover {
+      color: #03d9ff;
+    }
   </style>
-
-  <script>
-    // Function to display the popup message
-    function showPopup(message) {
-      const popup = document.createElement("div");
-      popup.className = "popup";
-      popup.textContent = message;
-      document.body.appendChild(popup);
-      // Automatically close the popup after 3 seconds
-      setTimeout(function () {
-        popup.remove();
-      }, 3000);
-    }
-  </script>
 
 </head>
 
-<body id="top">
-  <!-- HEADER-->
-  <header class="header">
+<body>
+<header class="header">
     <div class="header-top">
       <div class="container">
         <ul class="contact-list">
@@ -140,16 +201,16 @@
         <nav class="navbar container" data-navbar>
           <ul class="navbar-list">
             <li>
-              <a href="index.html" class="navbar-link" data-nav-link>Home</a>
+              <a href="../index.html" class="navbar-link" data-nav-link>Home</a>
             </li>
             <li>
-              <a href="#service" class="navbar-link" data-nav-link>Find donor</a>
+              <a href="../index.html#service" class="navbar-link" data-nav-link>Find donor</a>
             </li>
             <li>
-              <a href="about.html" class="navbar-link" data-nav-link>About Us</a>
+              <a href="../about.html" class="navbar-link" data-nav-link>About Us</a>
             </li>
             <li>
-              <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
+              <a href="../index.html#blog" class="navbar-link" data-nav-link>Blog</a>
             </li>
             <li>
               <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
@@ -167,32 +228,42 @@
 
   <main>
     <article>
-      <!--HERO-->
-    <section class="section hero" id="home" style="background-image: url('./assets/images/hero-bg.png')"
+      <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png'); margin: 0%;"
         aria-label="hero">
+        <!-- Login and Registration Form -->
         <div class="container">
-          <div class="hero-content">
-            <img src="assets/images/blood-icon.png" alt="ICON" width="70" height="70"> 
-            <p class="section-subtitle">Blood Bridge</p>
-            <h1 class="h1 hero-title">Contact Us</h1>
-            <h2 style="color: var(--royal-blue-light);">Contact Details</h2>
-            <p class="hero-text"><br>
-                MOBILE: +910123456789 | TELEPHONE: 0484-292674
-                <br><br>
-                EMAIL : bloodbridge001@gmail.com<br>
-            </p>
-            <form action="" class="hero-form" method="POST">
-              <input type="email" name="email_address" aria-label="email" placeholder="Your Email Address..." required
-                class="email-field">
-              <button type="submit" class="btn">Get Response Back</button>
-            </form>
+          <div class="form-container">
+            <div class="form-title">Login</div>
+            <hr><br><br>
+            <form action="" method="POST">
+              <div class="form-section">
+                <div class="form-field">
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-field">
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-field">
+                <label for="remember_me">Remember Me:</label>
+                <input type="checkbox" id="remember_me" name="remember_me" value="1">
+                </div>
+              </div><br>
+              <button type="submit" class="btn">Login</button>
+            </form><br><br>
+            <div class="form-title">Not Registered? <u><a href="register.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Register Here</a></u></div>
           </div>
+          <figure class="hero-banner">
+            <img src="../assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
+            <center><h1>Welcome back</h1><center>
+          </figure>
         </div>
-    </section>
+      </section>
     </article>
-    </main>
+  </main>
 
-  <!--FOOTER-->
+  <!--Footer-->
   <footer class="footer">
     <div class="footer-top section">
       <div class="container">
@@ -217,7 +288,7 @@
             <p class="footer-list-title">Other Links</p>
           </li>
           <li>
-            <a href="index.html" class="footer-link">
+            <a href="../index.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Home</span>
             </a>
@@ -229,7 +300,7 @@
             </a>
           </li>
           <li>
-            <a href="about.html" class="footer-link">
+            <a href="../about.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">About us</span>
             </a>
@@ -298,7 +369,7 @@
           <li>
             <p class="footer-list-title">Contact Us</p>
           </li>
-
+          </li>
           <li class="footer-item">
             <div class="item-icon">
               <ion-icon name="call-outline"></ion-icon>
@@ -321,17 +392,17 @@
         </p>
         <ul class="social-list">
           <li>
-            <a href="https://www.facebook.com/" class="social-link">
+            <a href="https://www.facebook.com/andro.pool.54?mibextid=ZbWKwL" class="social-link">
               <ion-icon name="logo-facebook"></ion-icon>
             </a>
           </li>
           <li>
-            <a href="https://www.instagram.com/" class="social-link">
+            <a href="https://www.instagram.com/_vladimir_putin.___/" class="social-link">
               <ion-icon name="logo-instagram"></ion-icon>
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/" class="social-link">
+            <a href="https://twitter.com/Annabel07785340" class="social-link">
               <ion-icon name="logo-twitter"></ion-icon>
             </a>
           </li>
@@ -340,42 +411,13 @@
     </div>
   </footer>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["email_address"]) && filter_var($_POST["email_address"], FILTER_VALIDATE_EMAIL)) {
-        // Sanitize the email address to prevent SQL injection
-        $email = htmlspecialchars($_POST["email_address"]);
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "bloodbridge_db";
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        $stmt = $conn->prepare("INSERT INTO response_back (email) VALUES (?)");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            echo '<script>showPopup("Email added successfully!");</script>';
-        } else {
-            echo '<script>showPopup("Error: Unable to add email. Please try again later.");</script>';
-        }
-        $stmt->close();
-        $conn->close();
-    } else {
-        echo '<script>showPopup("Error: Invalid email address. Please enter a valid email.");</script>';
-    }
-}
-?>
-
   <!--BACK TO TOP-->
   <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
     <ion-icon name="caret-up" aria-hidden="true"></ion-icon>
   </a>
 
   <!--custom js link-->
-  <script src="./assets/js/script.js" defer></script>
+  <script src="../assets/js/script.js" defer></script>
   <!--ionicon link-->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

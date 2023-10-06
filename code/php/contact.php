@@ -11,13 +11,87 @@
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!--css-->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
   
-
   <!-- google font link-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Popup styles */
+    .popup {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background: linear-gradient(135deg, #ffffff, #a3d2ee);
+      color: #0e254e;
+      font-size: 16px;
+      z-index: 9999;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    @media screen and (max-width: 768px) {
+    .hero-form {
+        display: flex;
+        flex-direction: column;
+      }
+      .email-field {
+        margin-bottom: 10px;
+      }
+      .hero-banner iframe {
+        width: 100%;
+        height: 200px;
+      }
+    }
+    @media screen and (max-width: 900px) {
+      .hero-form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .email-field {
+        margin-bottom: 10px;
+      }
+
+      .hero-banner iframe {
+        width: 100%;
+        height: 250px;
+      }
+    }
+    /* Media query for screen sizes between 905x800 and 1197x800 */
+    @media screen and (min-width: 905px) and (max-width: 1197px) {
+      .hero-form {
+        max-width: 70%;
+        margin: 0 auto;
+      }
+      .hero-banner iframe {
+        width: 100%;
+        height: 300px;
+      }
+    }
+
+  </style>
+
+  <script>
+    // Function to display the popup message
+    function showPopup(message) {
+      const popup = document.createElement("div");
+      popup.className = "popup";
+      popup.textContent = message;
+      document.body.appendChild(popup);
+      // Automatically close the popup after 3 seconds
+      setTimeout(function () {
+        popup.remove();
+      }, 3000);
+    }
+  </script>
 
 </head>
 
@@ -66,23 +140,23 @@
         <nav class="navbar container" data-navbar>
           <ul class="navbar-list">
             <li>
-              <a href="index.html" class="navbar-link" data-nav-link>Home</a>
+              <a href="../index.html" class="navbar-link" data-nav-link>Home</a>
             </li>
             <li>
-              <a href="#service" class="navbar-link" data-nav-link>Find donor</a>
+              <a href="../index.html#service" class="navbar-link" data-nav-link>Find donor</a>
             </li>
             <li>
-              <a href="#about" class="navbar-link" data-nav-link>About Us</a>
+              <a href="../about.html" class="navbar-link" data-nav-link>About Us</a>
             </li>
             <li>
-              <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
+              <a href="../index.html#blog" class="navbar-link" data-nav-link>Blog</a>
             </li>
             <li>
-              <a href="./php/contact.php" class="navbar-link" data-nav-link>Contact</a>
+              <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
             </li>
           </ul>
         </nav>
-        <a href="./php/register.php" class="btn">Login / Register</a>
+        <a href="register.php" class="btn">Login / Register</a>
         <button class="nav-toggle-btn" aria-label="Toggle menu" data-nav-toggler>
           <ion-icon name="menu-sharp" aria-hidden="true" class="menu-icon"></ion-icon>
           <ion-icon name="close-sharp" aria-hidden="true" class="close-icon"></ion-icon>
@@ -94,43 +168,29 @@
   <main>
     <article>
       <!--HERO-->
-      <section class="section hero" id="home" style="background-image: url('./assets/images/hero-bg.png')"
+    <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png')"
         aria-label="hero">
         <div class="container">
           <div class="hero-content">
-            <img src="assets/images/blood-icon.png" alt="ICON" width="70" height="70"> 
+            <img src="../assets/images/blood-icon.png" alt="ICON" width="70" height="70"> 
             <p class="section-subtitle">Blood Bridge</p>
-            <h1 class="h1 hero-title">Why Donate Blood ?</h1>
-            <p class="hero-text">
-                We need new blood donors from all the background to ensure there is right blood available for patients who needs it. 
-                We need:
-            <ul style="font-size: larger;" >
-                <li>• Atleast 400 donors to meet the present demand</li>
-                <li>• Around 1350 donors a year to replace those who can no longer donate</li>
-                <li>• 3000 new donors with priority blood types such as O negative every year</li>
-                <li>• More young people to start giving blood so we can make sure we have &nbsp;&nbsp;enough blood in the future</li>
-            </ul><br><br>
-            <p class="section-subtitle" style="color: dimgray;">
-                # The most precious gift that one can give to another person is the gift of life i.e. blood. It is the essence of life.<br><br>
-                # Your blood saves more than one life when it is separated into its components (red blood cells, plasma etc.).<br><br>
-                # Blood is needed regularly for patients with diseases such as thalassemia and hemophilia, and also for the treatment of injuries after an accident, major surgeries, anemia, etc.<br><br>
-                # It improves your health.<br><br>
-                # Did you know that people who donate blood are 88% less likely to suffer a heart attack and 33% less likely to acquire any type of cardiovascular disease.<br><br>
-                # When you donate blood, it removes 225 to 250 milligrams of iron from your body, hence reducing the risk of heart disease.<br><br>
-                # Blood Center performs numerous tests on the donated blood. Therefore regular blood donation helps in sheilding you from serious disease<br><br>
+            <h1 class="h1 hero-title">Contact Us</h1>
+            <h2 style="color: var(--royal-blue-light);">Contact Details</h2>
+            <p class="hero-text"><br>
+                MOBILE: +910123456789 | TELEPHONE: 0484-292674
+                <br><br>
+                EMAIL : bloodbridge001@gmail.com<br>
             </p>
-            </p>
+            <form action="" class="hero-form" method="POST">
+              <input type="email" name="email_address" aria-label="email" placeholder="Your Email Address..." required
+                class="email-field">
+              <button type="submit" class="btn">Get Response Back</button>
+            </form>
           </div>
-          <figure class="hero-banner">
-            <img src="./assets/images/whydonate.jpg" width="587" height="839" alt="hero banner" class="w-100"><br>
-            <img src="./assets/images/donate-copy.jpg" width="587" height="839" alt="hero banner" class="w-100">
-            <img src="./assets/images/whyydonate.jpg" width="587" height="839" alt="hero banner" class="w-100">
-          </figure>
         </div>
-      </section>
-
-   
-
+    </section>
+    </article>
+    </main>
 
   <!--FOOTER-->
   <footer class="footer">
@@ -157,7 +217,7 @@
             <p class="footer-list-title">Other Links</p>
           </li>
           <li>
-            <a href="index.html" class="footer-link">
+            <a href="../index.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Home</span>
             </a>
@@ -169,7 +229,7 @@
             </a>
           </li>
           <li>
-            <a href="about.html" class="footer-link">
+            <a href="../about.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">About us</span>
             </a>
@@ -280,13 +340,42 @@
     </div>
   </footer>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["email_address"]) && filter_var($_POST["email_address"], FILTER_VALIDATE_EMAIL)) {
+        // Sanitize the email address to prevent SQL injection
+        $email = htmlspecialchars($_POST["email_address"]);
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "bloodbridge_db";
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $stmt = $conn->prepare("INSERT INTO response_back (email) VALUES (?)");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        if ($stmt->affected_rows > 0) {
+            echo '<script>showPopup("Email added successfully!");</script>';
+        } else {
+            echo '<script>showPopup("Error: Unable to add email. Please try again later.");</script>';
+        }
+        $stmt->close();
+        $conn->close();
+    } else {
+        echo '<script>showPopup("Error: Invalid email address. Please enter a valid email.");</script>';
+    }
+}
+?>
+
   <!--BACK TO TOP-->
   <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
     <ion-icon name="caret-up" aria-hidden="true"></ion-icon>
   </a>
 
   <!--custom js link-->
-  <script src="./assets/js/script.js" defer></script>
+  <script src="../assets/js/script.js" defer></script>
   <!--ionicon link-->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
