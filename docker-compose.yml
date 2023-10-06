@@ -27,5 +27,6 @@ services:
       - ./database:/var/lib/mysql:rw
     environment:
       - MYSQL_ROOT_PASSWORD=1620
+      - MYSQL_DATABASE=bloodbridge_db
     ports:
       - '3306:3306'
