@@ -1,19 +1,13 @@
 <?php
 session_start();
+include "connection.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("Location: login.php");
     exit;
 }
 
-$servername = "localhost";
-$username = "root";
-$dbpassword = "";
-$dbname = "bloodbridge_db";
-$conn = new mysqli($servername, $username, $dbpassword, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$conn = newConnection();
 
 $email = $_SESSION["email"];
 
