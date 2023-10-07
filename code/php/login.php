@@ -1,19 +1,13 @@
 <?php
 session_start();
+include "connection.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize form inputs
     $email = isset($_POST["email"]) ? htmlspecialchars($_POST["email"]) : "";
     $password = isset($_POST["password"]) ? $_POST["password"] : "";
 
-    $servername = "localhost";
-    $username = "root";
-    $dbpassword = "";
-    $dbname = "bloodbridge_db";
-    $conn = new mysqli($servername, $username, $dbpassword, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    $conn = newConnection();
 
     // Check if the email exists in the database
     $stmt = $conn->prepare("SELECT password FROM registered_users WHERE email = ?");

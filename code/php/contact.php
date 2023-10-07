@@ -341,18 +341,15 @@
   </footer>
 
 <?php
+include "connection.php";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["email_address"]) && filter_var($_POST["email_address"], FILTER_VALIDATE_EMAIL)) {
         // Sanitize the email address to prevent SQL injection
         $email = htmlspecialchars($_POST["email_address"]);
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "bloodbridge_db";
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+
+        $conn = newConnection();
+
         $stmt = $conn->prepare("INSERT INTO response_back (email) VALUES (?)");
         $stmt->bind_param("s", $email);
         $stmt->execute();

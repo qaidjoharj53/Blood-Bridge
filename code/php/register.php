@@ -1,4 +1,6 @@
 <?php
+include "connection.php";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize form inputs
     $name = isset($_POST["full_name"]) ? htmlspecialchars($_POST["full_name"]) : "";
@@ -15,14 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $area = isset($_POST["area"]) ? htmlspecialchars($_POST["area"]) : "";
     $landmarks = isset($_POST["landmarks"]) ? htmlspecialchars($_POST["landmarks"]) : "";
 
-    $servername = "localhost";
-    $username = "root";
-    $dbpassword = "";
-    $dbname = "bloodbridge_db";
-    $conn = new mysqli($servername, $username, $dbpassword, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    $conn = newConnection();
+
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT); // Hash the password
     $stmt = $conn->prepare("INSERT INTO registered_users (name, email, phone, password, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if (!$stmt) {
