@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!--css-->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
   
   <!-- google font link-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,16 +195,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav class="navbar container" data-navbar>
           <ul class="navbar-list">
             <li>
-              <a href="index.html" class="navbar-link" data-nav-link>Home</a>
+              <a href="../index.html" class="navbar-link" data-nav-link>Home</a>
             </li>
             <li>
-              <a href="#service" class="navbar-link" data-nav-link>Find donor</a>
+              <a href="../index.html#service" class="navbar-link" data-nav-link>Find donor</a>
             </li>
             <li>
-              <a href="about.html" class="navbar-link" data-nav-link>About Us</a>
+              <a href="../about.html" class="navbar-link" data-nav-link>About Us</a>
             </li>
             <li>
-              <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
+              <a href="../index.html#blog" class="navbar-link" data-nav-link>Blog</a>
             </li>
             <li>
               <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
@@ -222,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <main>
     <article>
-      <section class="section hero" id="home" style="background-image: url('./assets/images/hero-bg.png'); margin: 0%;"
+      <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png'); margin: 0%;"
         aria-label="hero">
         <!-- Login and Registration Form -->
         <div class="container">
@@ -249,7 +249,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-title">Not Registered? <u><a href="register.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Register Here</a></u></div>
           </div>
           <figure class="hero-banner">
-            <img src="./assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
+            <img src="../assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
             <center><h1>Welcome back</h1><center>
           </figure>
         </div>
@@ -282,7 +282,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="footer-list-title">Other Links</p>
           </li>
           <li>
-            <a href="index.html" class="footer-link">
+            <a href="../index.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Home</span>
             </a>
@@ -294,7 +294,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </a>
           </li>
           <li>
-            <a href="about.html" class="footer-link">
+            <a href="../about.html" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">About us</span>
             </a>
@@ -411,7 +411,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </a>
 
   <!--custom js link-->
-  <script src="./assets/js/script.js" defer></script>
+  <script src="../assets/js/script.js" defer></script>
   <!--ionicon link-->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
