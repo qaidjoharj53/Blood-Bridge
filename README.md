@@ -81,3 +81,14 @@ You can stop the containers again using `docker compose down --remove-orphans`
 - Ensure the security of your XAMPP installation and website before deploying them to a live server.
 
 - If you encounter any issues, consult the XAMPP documentation or seek assistance from online forums and communities.
+
+## Thanks to the contributors!
+
+<a href="https://github.com/qaidjoharj53/Blood-Bridge/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=qaidjoharj53/Blood-Bridge" />
+</a>
+
+---
+
+<p align="right">(<a href="#top">Back to top</a>)</p>
+
