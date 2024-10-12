@@ -19,79 +19,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Popup styles */
-    .popup {
+    /* Form Styles */
+    .form-title {
+        color: var(--oxford-blue-1);
+        font-family: var(--ff-poppins);
+        font-size: 3.4rem;
+        font-weight: var(--fw-800);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-section {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background: linear-gradient(135deg, #ffffff, #a3d2ee);
-      color: #0e254e;
-      font-size: 16px;
-      z-index: 9999;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .form-field {
+      flex: 0 0 48%;
+      margin-bottom: 20px;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
-    @media screen and (max-width: 768px) {
-    .hero-form {
-        display: flex;
-        flex-direction: column;
-      }
-      .email-field {
-        margin-bottom: 10px;
-      }
-      .hero-banner iframe {
-        width: 100%;
-        height: 200px;
-      }
-    }
-    @media screen and (max-width: 900px) {
-      .hero-form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .email-field {
-        margin-bottom: 10px;
-      }
-
-      .hero-banner iframe {
-        width: 100%;
-        height: 250px;
-      }
-    }
-    /* Media query for screen sizes between 905x800 and 1197x800 */
-    @media screen and (min-width: 905px) and (max-width: 1197px) {
-      .hero-form {
-        max-width: 70%;
-        margin: 0 auto;
-      }
-      .hero-banner iframe {
-        width: 100%;
-        height: 300px;
-      }
+    .form-field input[type="submit"] {
+      background-color: #216aca;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
     }
 
+    .form-field input[type="submit"]:hover {
+      background-color: #060952;
+    }
   </style>
-
-  <script>
-    // Function to display the popup message
-    function showPopup(message) {
-      const popup = document.createElement("div");
-      popup.className = "popup";
-      popup.textContent = message;
-      document.body.appendChild(popup);
-      // Automatically close the popup after 3 seconds
-      setTimeout(function () {
-        popup.remove();
-      }, 3000);
-    }
-  </script>
 
 </head>
 
@@ -167,31 +140,99 @@
 
   <main>
     <article>
-      <!--HERO-->
-    <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png')"
-        aria-label="hero">
-        <div class="container">
-          <div class="hero-content">
-            <img src="../assets/images/blood-icon.png" alt="ICON" width="70" height="70"> 
-            <p class="section-subtitle">Blood Bridge</p>
-            <h1 class="h1 hero-title">Contact Us</h1>
-            <h2 style="color: var(--royal-blue-light);">Contact Details</h2>
-            <p class="hero-text"><br>
-                MOBILE: +910123456789 | TELEPHONE: 0484-292674
-                <br><br>
-                EMAIL : bloodbridge001@gmail.com<br>
-            </p>
-            <form action="" class="hero-form" method="POST">
-              <input type="email" name="email_address" aria-label="email" placeholder="Your Email Address..." required
-                class="email-field">
-              <button type="submit" class="btn">Get Response Back</button>
-            </form>
-          </div>
-        </div>
-    </section>
-    </article>
-    </main>
-
+        <section class="section hero" id="home" style="background-image: url('../assets/images/hero-bg.png'); margin: 0%;" aria-label="hero">
+            <!-- Login and Registration Form -->
+            <div class="container">
+              <div class="form-container">
+                <div class="form-title">Register</div>
+                <form action="#" method="POST">
+                  <!-- Login Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="full-name">FULL NAME</label>
+                      <input type="text" id="full-name" name="full_name" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="mobile">MOBILE NUMBER</label>
+                      <input type="text" id="mobile" name="mobile_number" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="email">EMAIL</label>
+                      <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="password">PASSWORD</label>
+                      <input type="password" id="password" name="password" required>
+                    </div>
+                  </div>
+                  <!-- Donor Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="blood-group">BLOOD GROUP</label>
+                      <select id="blood-group" name="blood_group" required>
+                        <option value="" disabled selected>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                      </select>
+                    </div>
+                    <div class="form-field">
+                      <label for="birth-date">BIRTH DATE</label>
+                      <input type="date" id="birth-date" name="birth_date" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="gender">GENDER</label>
+                      <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="form-field">
+                      <label for="weight">WEIGHT</label>
+                      <input type="text" id="weight" name="weight" required>
+                    </div>
+                  </div>
+                  <!-- Contact Information -->
+                  <div class="form-section">
+                    <div class="form-field">
+                      <label for="state">STATE</label>
+                      <input type="text" id="state" name="state" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="district">DISTRICT</label>
+                      <input type="text" id="district" name="district" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="zip-code">ZIP CODE</label>
+                      <input type="text" id="zip-code" name="zip_code" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="area">AREA</label>
+                      <input type="text" id="area" name="area" required>
+                    </div>
+                  </div>
+                  <div class="form-field">
+                      <label for="area">Landmarks</label>
+                      <input type="text" id="landmarks" name="landmarks" required>
+                    </div>
+                  <button type="submit" class="btn">Register</button>
+                </form>
+                <div class="form-title">Already Registered? <u><a href="login.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Login Here</a></u></div>
+              </div>
+              <figure class="hero-banner">
+                <img src="../assets/images/bg.svg" width="587" height="839" alt="hero banner" class="w-100">
+                <center><h2>New Here ?</h2></center>
+              </figure>
+            </div>
+          </section>
+  
   <!--FOOTER-->
   <footer class="footer">
     <div class="footer-top section">
@@ -217,7 +258,7 @@
             <p class="footer-list-title">Other Links</p>
           </li>
           <li>
-            <a href="../index.html" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Home</span>
             </a>
@@ -229,7 +270,7 @@
             </a>
           </li>
           <li>
-            <a href="../about.html" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">About us</span>
             </a>
@@ -241,13 +282,13 @@
             </a>
           </li>
           <li>
-            <a href="contact.php" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Contact</span>
             </a>
           </li>
           <li>
-            <a href="login.php" class="footer-link">
+            <a href="#" class="footer-link">
               <ion-icon name="add-outline"></ion-icon>
               <span class="span">Login / Register</span>
             </a>
@@ -340,32 +381,6 @@
     </div>
   </footer>
 
-<?php
-include "connection.php";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["email_address"]) && filter_var($_POST["email_address"], FILTER_VALIDATE_EMAIL)) {
-        // Sanitize the email address to prevent SQL injection
-        $email = htmlspecialchars($_POST["email_address"]);
-
-        $conn = newConnection();
-
-        $stmt = $conn->prepare("INSERT INTO response_back (email) VALUES (?)");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            echo '<script>showPopup("Email added successfully!");</script>';
-        } else {
-            echo '<script>showPopup("Error: Unable to add email. Please try again later.");</script>';
-        }
-        $stmt->close();
-        $conn->close();
-    } else {
-        echo '<script>showPopup("Error: Invalid email address. Please enter a valid email.");</script>';
-    }
-}
-?>
-
   <!--BACK TO TOP-->
   <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
     <ion-icon name="caret-up" aria-hidden="true"></ion-icon>
@@ -376,6 +391,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!--ionicon link-->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Validate and sanitize form inputs
+        const name = document.getElementById("full-name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("mobile").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const bloodgroup = document.getElementById("blood-group").value.trim();
+        const gender = document.getElementById("gender").value.trim();
+        const birthdate = document.getElementById("birth-date").value.trim();
+        const weight = document.getElementById("weight").value.trim();
+        const state = document.getElementById("state").value.trim();
+        const zipcode = document.getElementById("zip-code").value.trim();
+        const district = document.getElementById("district").value.trim();
+        const area = document.getElementById("area").value.trim();
+        const landmarks = document.getElementById("landmarks").value.trim();
+
+        const data = {
+          full_name: name,
+          email: email,
+          mobile_number: phone,
+          password: password,
+          blood_group: bloodgroup,
+          gender: gender,
+          birth_date: birthdate,
+          weight: weight,
+          state: state,
+          zip_code: zipcode,
+          district: district,
+          area: area,
+          landmarks: landmarks
+        };
+
+        fetch("register_endpoint.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            alert("Registration successful!");
+          } else {
+            alert("Error: Unable to register. Please try again later.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Error: Unable to register. Please try again later.");
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
