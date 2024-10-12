@@ -1,10 +1,12 @@
+user: 'your_username',
+
 <?php
 session_start();
 include "connection.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("Location: login.php");
-    exit;
+  header("Location: login.php");
+  exit;
 }
 
 $conn = newConnection();
@@ -13,7 +15,7 @@ $email = $_SESSION["email"];
 
 $stmt = $conn->prepare("SELECT name, email, phone, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark, password, donations, received FROM registered_users WHERE email = ?");
 if (!$stmt) {
-    die("Error: " . $conn->error);
+  die("Error: " . $conn->error);
 }
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -21,78 +23,152 @@ $stmt->bind_result($name, $email, $phone, $bloodgroup, $gender, $birthdate, $wei
 $stmt->fetch();
 $stmt->close();
 
-/* // Calculate the number of donations from the "donations" table
-$donations_count = 0;
-if ($conn->query("SELECT COUNT(*) as total FROM donations WHERE user_email = '$email'")) {
-    $result = $conn->query("SELECT COUNT(*) as total FROM donations WHERE user_email = '$email'");
-    $data = $result->fetch_assoc();
-    $donations_count = $data['total'];
-} */
-
 // Update user information in the database
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["change_password"])) {
-        // Password change form is submitted
-        $current_password = $_POST["current_password"];
-        $new_password = $_POST["new_password"];
-        $confirm_new_password = $_POST["confirm_new_password"];
+  if (isset($_POST["change_password"])) {
+    // Password change form is submitted
+    $current_password = $_POST["current_password"];
+    $new_password = $_POST["new_password"];
+    $confirm_new_password = $_POST["confirm_new_password"];
 
-        // Validate the current password (You might want to check if it matches the one in the database)
-        if (!password_verify($current_password, $password)) {
-            // Incorrect current password
-            echo "<script>alert('Old password is incorrect. Please try again.');</script>";
-        } elseif (strlen($new_password) < 6) {
-            // Validate the new password (You can add more validation rules if needed)
-            echo "<script>alert('Password must be at least 6 characters long.');</script>";
-        } elseif ($new_password !== $confirm_new_password) {
-            // New password and Confirm new password do not match
-            echo "<script>alert('New password and Confirm new password do not match.');</script>";
-        } else {
-            // Hash the new password before updating in the database
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-            // Update the password in the database
-            $stmt = $conn->prepare("UPDATE registered_users SET password=? WHERE email=?");
-            if (!$stmt) {
-                die("Error: " . $conn->error);
-            }
-            $stmt->bind_param("ss", $hashed_password, $email);
-            $stmt->execute();
-            $stmt->close();
-
-            // Show success message
-            echo "<script>alert('Password updated successfully.');</script>";
-        }
+    // Validate the current password (You might want to check if it matches the one in the database)
+    if (!password_verify($current_password, $password)) {
+      // Incorrect current password
+      echo "<script>alert('Old password is incorrect. Please try again.');</script>";
+    } elseif (strlen($new_password) < 6) {
+      // Validate the new password (You can add more validation rules if needed)
+      echo "<script>alert('Password must be at least 6 characters long.');</script>";
+    } elseif ($new_password !== $confirm_new_password) {
+      // New password and Confirm new password do not match
+      echo "<script>alert('New password and Confirm new password do not match.');</script>";
     } else {
-        // Other credentials form is submitted
-        $name = $_POST["name"];
-        $phone = $_POST["phone"];
-        $bloodgroup = $_POST["bloodgroup"];
-        $gender = $_POST["gender"];
-        $birthdate = $_POST["birthdate"];
-        $weight = $_POST["weight"];
-        $state = $_POST["state"];
-        $zipcode = $_POST["zipcode"];
-        $district = $_POST["district"];
-        $area = $_POST["area"];
-        $landmark = $_POST["landmark"];
+      // Hash the new password before updating in the database
+      $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("UPDATE registered_users SET name=?, phone=?, bloodgroup=?, gender=?, birthdate=?, weight=?, state=?, zipcode=?, district=?, area=?, landmark=? WHERE email=?");
-        if (!$stmt) {
-            die("Error: " . $conn->error);
-        }
-        $stmt->bind_param("sssssdssssss", $name, $phone, $bloodgroup, $gender, $birthdate, $weight, $state, $zipcode, $district, $area, $landmark, $email);
-        $stmt->execute();
-        $stmt->close();
+      // Update the password in the database
+      $stmt = $conn->prepare("UPDATE registered_users SET password=? WHERE email=?");
+      if (!$stmt) {
+        die("Error: " . $conn->error);
+      }
+      $stmt->bind_param("ss", $hashed_password, $email);
+      $stmt->execute();
+      $stmt->close();
 
-        // Show success message
-        echo "<script>alert('Information updated successfully.');</script>";
+      // Show success message
+      echo "<script>alert('Password updated successfully.');</script>";
     }
+  } else {
+    // Other credentials form is submitted
+    $name = $_POST["name"];
+    $phone = $_POST["phone"];
+    $bloodgroup = $_POST["bloodgroup"];
+    $gender = $_POST["gender"];
+    $birthdate = $_POST["birthdate"];
+    $weight = $_POST["weight"];
+    $state = $_POST["state"];
+    $zipcode = $_POST["zipcode"];
+    $district = $_POST["district"];
+    $area = $_POST["area"];
+    $landmark = $_POST["landmark"];
+
+    $stmt = $conn->prepare("UPDATE registered_users SET name=?, phone=?, bloodgroup=?, gender=?, birthdate=?, weight=?, state=?, zipcode=?, district=?, area=?, landmark=? WHERE email=?");
+    if (!$stmt) {
+      die("Error: " . $conn->error);
+    }
+    $stmt->bind_param("sssssdssssss", $name, $phone, $bloodgroup, $gender, $birthdate, $weight, $state, $zipcode, $district, $area, $landmark, $email);
+    $stmt->execute();
+    $stmt->close();
+
+    // Show success message
+    echo "<script>alert('Information updated successfully.');</script>";
+  }
 }
 
 $conn->close();
 ?>
+// Assuming you have a Node.js server setup with Express and a MySQL database connection
 
+const express = require('express');
+const session = require('express-session');
+const mysql = require('mysql');
+const bcrypt = require('bcrypt');
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true
+}));
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  password: 'your_password',
+  database: 'your_database'
+});
+
+app.get('/dashboard', (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect('/login');
+  }
+
+  const email = req.session.email;
+
+  db.query('SELECT name, email, phone, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark, password, donations, received FROM registered_users WHERE email = ?', [email], (err, results) => {
+    if (err) throw err;
+
+    const user = results[0];
+    res.render('dashboard', { user });
+  });
+});
+
+app.post('/dashboard', (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect('/login');
+  }
+
+  const email = req.session.email;
+
+  if (req.body.change_password) {
+    const { current_password, new_password, confirm_new_password } = req.body;
+
+    db.query('SELECT password FROM registered_users WHERE email = ?', [email], (err, results) => {
+      if (err) throw err;
+
+      const hashedPassword = results[0].password;
+
+      if (!bcrypt.compareSync(current_password, hashedPassword)) {
+        return res.send("<script>alert('Old password is incorrect. Please try again.');</script>");
+      }
+
+      if (new_password.length < 6) {
+        return res.send("<script>alert('Password must be at least 6 characters long.');</script>");
+      }
+
+      if (new_password !== confirm_new_password) {
+        return res.send("<script>alert('New password and Confirm new password do not match.');</script>");
+      }
+
+      const newHashedPassword = bcrypt.hashSync(new_password, 10);
+
+      db.query('UPDATE registered_users SET password = ? WHERE email = ?', [newHashedPassword, email], (err) => {
+        if (err) throw err;
+        res.send("<script>alert('Password updated successfully.');</script>");
+      });
+    });
+  } else {
+    const { name, phone, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark } = req.body;
+
+    db.query('UPDATE registered_users SET name = ?, phone = ?, bloodgroup = ?, gender = ?, birthdate = ?, weight = ?, state = ?, zipcode = ?, district = ?, area = ?, landmark = ? WHERE email = ?', [name, phone, bloodgroup, gender, birthdate, weight, state, zipcode, district, area, landmark, email], (err) => {
+      if (err) throw err;
+      res.send("<script>alert('Information updated successfully.');</script>");
+    });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
 <!DOCTYPE html>
 <html lang="en">
 
